@@ -1,0 +1,47 @@
+import React, { useContext } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthContext } from './context/AuthContext';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Upload from './pages/Upload';
+import Dashboard from './pages/Dashboard';
+
+const ProtectedRoute = ({ children }) => {
+    const { user, loading } = useContext(AuthContext);
+    if (loading) return <div className="min-h-screen bg-neutral-900 text-white flex justify-center items-center">Loading...</div>;
+    if (!user) return <Navigate to="/login" />;
+    return children;
+};
+
+function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                    path="/upload"
+                    element={
+                        <ProtectedRoute>
+                            <Upload />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/"
+                    element={<Navigate to="/dashboard" />}
+                />
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+export default App;
