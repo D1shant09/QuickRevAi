@@ -26,7 +26,7 @@ const uploadToCloudinary = (buffer) => {
 
 const extractTextFromPDF = async (buffer) => {
     try {
-        const data = await pdfParse(buffer);
+        const data = await pdfParse.default ? pdfParse.default(buffer) : pdfParse(buffer);
         return data.text;
     } catch (error) {
         console.error("PDF Parse Error:", error);

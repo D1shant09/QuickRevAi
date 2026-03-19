@@ -76,4 +76,14 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const doc = await Document.findOne({ _id: req.params.id, user: req.user.id });
+        if (!doc) return res.status(404).json({ error: 'Document not found.' });
+        res.json(doc);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch document.' });
+    }
+});
+
 module.exports = router;
