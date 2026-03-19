@@ -1,155 +1,211 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, RotateCw } from 'lucide-react';
+import { useState, useRef } from "react";
+import { ChevronLeft, ChevronRight, RotateCw } from "lucide-react";
 
 const Flashcard = ({ flashcards }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [flipped, setFlipped] = useState(false);
-    const [touchStart, setTouchStart] = useState(null);
-    const [touchEnd, setTouchEnd] = useState(null);
+    const touchStartX = useRef(null);
 
-    const minSwipeDistance = 50;
+    if (!flashcards || flashcards.length === 0)
+        return <div className="text-center text-neutral-400">No flashcards available.</div>;
 
-    const onTouchStart = (e) => {
-        setTouchEnd(null);
-        setTouchStart(e.targetTouches[0].clientX);
-    };
+    const total = flashcards.length;
+    const current = flashcards[currentIndex];
 
-    const onTouchMove = (e) => {
-        setTouchEnd(e.targetTouches[0].clientX);
-    };
-
-    const onTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
-        const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > minSwipeDistance;
-        const isRightSwipe = distance < -minSwipeDistance;
-
-        if (isLeftSwipe && currentIndex < flashcards.length - 1) {
-            handleNext();
-        }
-        if (isRightSwipe && currentIndex > 0) {
-            handlePrev();
-        }
-    };
-
-    if (!flashcards || flashcards.length === 0) return <div>No flashcards available.</div>;
-
-    const handleNext = () => {
+    const goNext = () => {
+        if (currentIndex >= total - 1) return;
         setFlipped(false);
-        setTimeout(() => setCurrentIndex(prev => Math.min(prev + 1, flashcards.length - 1)), 150);
+        setTimeout(() => setCurrentIndex((i) => i + 1), 150);
     };
 
-    const handlePrev = () => {
+    const goPrev = () => {
+        if (currentIndex <= 0) return;
         setFlipped(false);
-        setTimeout(() => setCurrentIndex(prev => Math.max(prev - 1, 0)), 150);
+        setTimeout(() => setCurrentIndex((i) => i - 1), 150);
     };
 
-    const handleFlip = () => {
-        setFlipped(!flipped);
-    };
-
-    const handleDotClick = (index) => {
+    const handleDotClick = (idx) => {
         setFlipped(false);
-        setTimeout(() => setCurrentIndex(index), 150);
+        setTimeout(() => setCurrentIndex(idx), 150);
     };
 
-    const currentCard = flashcards[currentIndex];
+    const handleTouchStart = (e) => {
+        touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = (e) => {
+        if (touchStartX.current === null) return;
+        const diff = touchStartX.current - e.changedTouches[0].clientX;
+        if (diff > 50) goNext();
+        else if (diff < -50) goPrev();
+        touchStartX.current = null;
+    };
 
     return (
-        <div className="w-full max-w-[512px] mx-auto flex flex-col items-center">
-            {/* Progress Bar */}
-            <div className="w-full bg-white/10 h-2 rounded-full mb-6 overflow-hidden">
-                <div
-                    className="bg-blue-500 h-full transition-all duration-300"
-                    style={{ width: `${((currentIndex + 1) / flashcards.length) * 100}%` }}
-                ></div>
+        <div style={{ width: "100%", maxWidth: "512px", margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+            {/* Progress bar */}
+            <div style={{ width: "100%", background: "rgba(255,255,255,0.1)", height: "6px", borderRadius: "999px", marginBottom: "16px", overflow: "hidden" }}>
+                <div style={{ width: `${((currentIndex + 1) / total) * 100}%`, background: "#3b82f6", height: "100%", borderRadius: "999px", transition: "width 0.3s ease" }} />
             </div>
 
-            <div className="text-neutral-400 mb-4 text-sm font-medium">Card {currentIndex + 1} of {flashcards.length}</div>
+            <div style={{ color: "#a3a3a3", fontSize: "14px", marginBottom: "16px" }}>
+                Card {currentIndex + 1} of {total}
+            </div>
 
-            {/* Card Area */}
+            {/* Card flip container */}
             <div
-                className="w-full h-80 perspective-1000 cursor-pointer mb-8"
-                onClick={handleFlip}
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
-                style={{ perspective: "1000px" }}
+                onClick={() => setFlipped((f) => !f)}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                style={{
+                    width: "100%",
+                    height: "300px",
+                    perspective: "1200px",
+                    cursor: "pointer",
+                    marginBottom: "24px",
+                }}
             >
                 <div
-                    className="relative w-full h-full transition-transform duration-500"
                     style={{
-                        transformStyle: "preserve-3d",
-                        WebkitTransformStyle: "preserve-3d",
-                        transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-                        transition: "transform 0.5s ease",
-                        position: "relative",
                         width: "100%",
                         height: "100%",
+                        position: "relative",
+                        transformStyle: "preserve-3d",
+                        WebkitTransformStyle: "preserve-3d",
+                        transition: "transform 0.6s ease",
+                        transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
                     }}
                 >
-                    {/* Front View */}
+                    {/* Front */}
                     <div
-                        className="absolute inset-0 bg-[#151515] border border-white/10 rounded-2xl p-8 shadow-xl flex flex-col justify-center items-center text-center"
                         style={{
+                            position: "absolute",
+                            top: 0, left: 0, right: 0, bottom: 0,
                             backfaceVisibility: "hidden",
                             WebkitBackfaceVisibility: "hidden",
-                            position: "absolute",
-                            inset: 0,
+                            background: "#151515",
+                            border: "1px solid rgba(255,255,255,0.1)",
+                            borderRadius: "16px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "32px",
+                            textAlign: "center",
                         }}
                     >
-                        <span className="absolute top-4 left-4 text-xs font-bold text-blue-500/50 uppercase tracking-widest bg-blue-500/10 px-2 py-1 rounded">Question</span>
-                        <h3 className="text-2xl font-medium text-white break-words w-full">{currentCard.question}</h3>
+                        <span style={{
+                            position: "absolute", top: "12px", left: "12px",
+                            fontSize: "11px", fontWeight: "700", color: "rgba(59,130,246,0.6)",
+                            textTransform: "uppercase", letterSpacing: "0.1em",
+                            background: "rgba(59,130,246,0.1)", padding: "4px 8px", borderRadius: "6px"
+                        }}>Question</span>
+                        <p style={{ color: "#fff", fontSize: "20px", fontWeight: "500", lineHeight: "1.5", wordBreak: "break-word" }}>
+                            {current.question}
+                        </p>
+                        <span style={{ position: "absolute", bottom: "12px", color: "rgba(255,255,255,0.2)", fontSize: "12px" }}>
+                            Tap to reveal answer
+                        </span>
                     </div>
-                    {/* Back View */}
+
+                    {/* Back */}
                     <div
-                        className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-purple-900/40 border border-purple-500/50 rounded-2xl p-8 shadow-xl flex flex-col justify-center items-center text-center"
                         style={{
+                            position: "absolute",
+                            top: 0, left: 0, right: 0, bottom: 0,
                             backfaceVisibility: "hidden",
                             WebkitBackfaceVisibility: "hidden",
                             transform: "rotateY(180deg)",
-                            position: "absolute",
-                            inset: 0,
+                            background: "linear-gradient(135deg, rgba(30,27,75,0.9), rgba(46,16,101,0.9))",
+                            border: "1px solid rgba(168,85,247,0.4)",
+                            borderRadius: "16px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "32px",
+                            textAlign: "center",
                         }}
                     >
-                        <span className="absolute top-4 left-4 text-xs font-bold text-purple-300 uppercase tracking-widest bg-purple-500/20 px-2 py-1 rounded">Answer</span>
-                        <p className="text-xl text-neutral-100 font-medium overflow-y-auto break-words w-full">{currentCard.answer}</p>
+                        <span style={{
+                            position: "absolute", top: "12px", left: "12px",
+                            fontSize: "11px", fontWeight: "700", color: "rgba(216,180,254,0.8)",
+                            textTransform: "uppercase", letterSpacing: "0.1em",
+                            background: "rgba(168,85,247,0.2)", padding: "4px 8px", borderRadius: "6px"
+                        }}>Answer</span>
+                        <p style={{ color: "#f3f4f6", fontSize: "20px", fontWeight: "500", lineHeight: "1.5", wordBreak: "break-word" }}>
+                            {current.answer}
+                        </p>
+                        <span style={{ position: "absolute", bottom: "12px", color: "rgba(216,180,254,0.3)", fontSize: "12px" }}>
+                            Tap to flip back
+                        </span>
                     </div>
                 </div>
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="w-full flex items-center justify-between mb-8 gap-4">
+            {/* Navigation */}
+            <div style={{ width: "100%", display: "flex", gap: "12px", marginBottom: "20px" }}>
                 <button
-                    onClick={handlePrev}
+                    onClick={goPrev}
                     disabled={currentIndex === 0}
-                    className="p-4 bg-white/5 disabled:opacity-30 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center border border-white/5 w-16 h-16"
+                    style={{
+                        width: "56px", height: "56px", borderRadius: "12px",
+                        background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
+                        color: "#fff", cursor: currentIndex === 0 ? "not-allowed" : "pointer",
+                        opacity: currentIndex === 0 ? 0.3 : 1,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        flexShrink: 0,
+                    }}
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft size={20} />
                 </button>
+
                 <button
-                    onClick={handleFlip}
-                    className="flex-1 p-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] flex items-center justify-center gap-2 h-16"
+                    onClick={() => setFlipped((f) => !f)}
+                    style={{
+                        flex: 1, height: "56px", borderRadius: "12px",
+                        background: "linear-gradient(90deg, #2563eb, #7c3aed)",
+                        border: "none", color: "#fff", fontWeight: "700",
+                        fontSize: "15px", cursor: "pointer",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                    }}
                 >
-                    <RotateCw className="w-5 h-5" /> Flip Card
+                    <RotateCw size={18} /> Flip Card
                 </button>
+
                 <button
-                    onClick={handleNext}
-                    disabled={currentIndex === flashcards.length - 1}
-                    className="p-4 bg-white/5 disabled:opacity-30 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center border border-white/5 w-16 h-16"
+                    onClick={goNext}
+                    disabled={currentIndex === total - 1}
+                    style={{
+                        width: "56px", height: "56px", borderRadius: "12px",
+                        background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
+                        color: "#fff", cursor: currentIndex === total - 1 ? "not-allowed" : "pointer",
+                        opacity: currentIndex === total - 1 ? 0.3 : 1,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        flexShrink: 0,
+                    }}
                 >
-                    <ChevronRight className="w-6 h-6" />
+                    <ChevronRight size={20} />
                 </button>
             </div>
 
-            {/* Dot Indicators */}
-            <div className="flex flex-wrap justify-center gap-2 px-4">
+            {/* Dot indicators */}
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px", padding: "0 16px" }}>
                 {flashcards.map((_, idx) => (
                     <button
                         key={idx}
                         onClick={() => handleDotClick(idx)}
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'bg-blue-400 w-6' : 'bg-white/20 hover:bg-white/40'}`}
-                        aria-label={`Go to card ${idx + 1}`}
+                        style={{
+                            width: idx === currentIndex ? "24px" : "10px",
+                            height: "10px",
+                            borderRadius: "999px",
+                            background: idx === currentIndex ? "#3b82f6" : "rgba(255,255,255,0.2)",
+                            border: "none",
+                            cursor: "pointer",
+                            padding: 0,
+                            transition: "all 0.3s ease",
+                        }}
                     />
                 ))}
             </div>
