@@ -236,36 +236,4 @@ For unsupported pages, users can copy-paste the text manually using the **Paste 
 
 ---
 
-## Roadmap
-
-- [x] Project structure and API design
-- [ ] User authentication (JWT)
-- [ ] PDF upload + text extraction
-- [ ] URL scraping
-- [ ] Text paste input
-- [ ] Gemini API integration
-- [ ] Flashcard + quiz UI
-- [ ] SM-2 spaced repetition engine
-- [ ] Analytics dashboard
-- [ ] Google OAuth
-- [ ] Deployment (Vercel + Render)
-
----
-
-## Team
-
-**MLR Institute of Technology, Hyderabad — Department of Information Technology**
-Mini Project | Batch 01 | 2023–2027
-
-| Name | Roll Number | Role |
-|---|---|---|
-| F. Dishant | 23R21A12E0 | Team Lead |
-| K. Eeshytva | 23R21A12F3 | Developer |
-| K. Mahathi | 23R21A12F4 | Developer |
-| P.V. Sarika | 23R21A12H1 | Developer |
-
-**Guide:** Dr. B. VeeraSekhar Reddy (Assistant Professor, IT Department)
-
----
-
 > QuickRev AI — built to make revision smarter, not harder.
