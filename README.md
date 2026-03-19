@@ -1,109 +1,147 @@
-# QuickRev AI 🧠
-### Upload, Automate and Ace
+# 🧠 QuickRev AI
 
+> **Upload, Automate and Ace**
+>
 > An AI-powered revision platform that transforms your study material — PDFs, web pages, or pasted notes — into flashcards, quizzes, and summaries using spaced repetition.
 
 ---
 
-## Table of Contents
+## 📑 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [API Reference](#api-reference)
-- [How It Works](#how-it-works)
-- [Roadmap](#roadmap)
-- [Team](#team)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [API Reference](#-api-reference)
+- [How It Works](#-how-it-works)
 
 ---
 
-## Overview
+## 🌟 Overview
 
 Students spend hours rereading the same notes — but passive revision leads to poor long-term retention. **QuickRev AI** fixes that.
 
-You upload a PDF, paste a URL, or type your notes. The app automatically generates flashcards and quizzes from your content using Google Gemini. A spaced repetition engine (SM-2 algorithm) then schedules your reviews — hard topics come back more often, mastered ones less. You study smarter, not longer.
+You can **upload a PDF**, **paste a URL**, or **type your notes**. The app automatically generates:
+- 📝 Concise summaries
+- 🗂️ Flashcards
+- 🎯 Quizzes
+
+Powered by **Google Gemini** and backed by a spaced repetition engine (SM-2 algorithm), it schedules your reviews so that hard topics come back more often, and mastered ones less. **Study smarter, not longer.**
 
 ---
 
-## Features
+## ✨ Features
 
-### Phase 1 (Prototype)
-- **PDF upload** — upload lecture notes or textbook chapters (up to 25 MB)
-- **URL scraping** — paste any article or documentation URL and extract the text automatically
-- **Text paste** — paste raw notes directly into the app
-- **AI summarization** — get a concise 3–5 sentence overview of your material
-- **Flashcard generation** — 15 auto-generated Q&A pairs per session
-- **Quiz generation** — 5 MCQ questions with 4 options and instant feedback
-- **User auth** — register and login with email/password (JWT)
+### 🚀 Phase 1 (Prototype)
+- **PDF Upload** — Upload lecture notes or textbook chapters (up to 25 MB).
+- **URL Scraping** — Paste any article or documentation URL and extract text automatically.
+- **Text Paste** — Paste raw notes directly into the app.
+- **AI Summarization** — Get a concise 3–5 sentence overview of your material.
+- **Flashcard Generation** — 15 auto-generated Q&A pairs per session.
+- **Quiz Generation** — 5 MCQ questions with 4 options and instant feedback.
+- **User Authentication** — Secure registration & login with email/password (JWT).
 
-### Phase 2 (Planned)
-- SM-2 spaced repetition scheduler
-- Easy / Good / Hard / Again card rating
-- Analytics dashboard with mastery charts
-- Revision calendar heatmap
-- Google OAuth login
+### 🔮 Phase 2 (Planned)
+- [ ] SM-2 spaced repetition scheduler
+- [ ] Easy / Good / Hard / Again card rating
+- [ ] Analytics dashboard with mastery charts
+- [ ] Revision calendar heatmap
+- [ ] Google OAuth login
 
 ---
 
-## Tech Stack
+## 💻 Tech Stack
 
 | Layer | Technology | Purpose |
 |---|---|---|
-| Frontend | React + Vite | SPA UI |
-| Styling | Tailwind CSS | Responsive utility-first styling |
-| Backend | Node.js + Express | REST API server |
-| Database | MongoDB + Mongoose | Users, documents, flashcards |
-| AI | Google Gemini API | Summarization + flashcard/quiz generation |
-| Auth | JWT + bcrypt | Secure authentication |
-| File Storage | Cloudinary | PDF storage |
-| PDF Parsing | pdf-parse | Text extraction from PDFs |
-| Web Scraping | axios + cheerio | URL content extraction |
-| Hosting | Vercel (FE) + Render (BE) | Cloud deployment |
+| **Frontend** | React + Vite | SPA UI |
+| **Styling** | Tailwind CSS | Responsive utility-first styling |
+| **Backend** | Node.js + Express | REST API server |
+| **Database** | MongoDB + Mongoose | Users, documents, flashcards |
+| **AI** | Google Gemini API | Summarization + flashcard/quiz generation |
+| **Auth** | JWT + bcrypt | Secure authentication |
+| **File Storage** | Cloudinary | PDF storage |
+| **PDF Parsing** | `pdf-parse` | Text extraction from PDFs |
+| **Web Scraping** | Axios + Cheerio | URL content extraction |
+| **Hosting** | Vercel (FE) + Render (BE)| Cloud deployment |
 
 ---
 
-## Project Structure
+## 🚀 Getting Started
 
+### Prerequisites
+Make sure you have the following before you begin:
+- **Node.js** (v18+)
+- **MongoDB Atlas** account (free) — [cloud.mongodb.com](https://cloud.mongodb.com/)
+- **Google Gemini API Key** (free) — [aistudio.google.com](https://aistudio.google.com/)
+- **Cloudinary** account (free) — [cloudinary.com](https://cloudinary.com/)
+
+### Installation & Setup
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/your-username/quickrev-ai.git
+cd quickrev-ai
 ```
+
+**2. Install dependencies**
+```bash
+bash setup.sh
+```
+
+**3. Configure Environment Variables**
+Copy the example environment file:
+```bash
+cp server/.env.example server/.env
+```
+Open `server/.env` and fill in your credentials:
+
+| Variable | Where to get it |
+|---|---|
+| `MONGODB_URI` | MongoDB Atlas → Connect → Drivers |
+| `JWT_SECRET` | Any long random string |
+| `GEMINI_API_KEY` | Google AI Studio → Get API key |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary Dashboard |
+| `CLOUDINARY_API_KEY` | Cloudinary Dashboard |
+| `CLOUDINARY_API_SECRET` | Cloudinary Dashboard |
+
+**4. Run the application**
+
+Start the backend server (Terminal 1):
+```bash
+cd server
+node index.js
+```
+
+Start the frontend development server (Terminal 2):
+```bash
+cd client
+npm run dev
+```
+
+> **Open [http://localhost:5173](http://localhost:5173) in your browser to view the app!**
+
+---
+
+## 📂 Project Structure
+
+```text
 quickrev-ai/
-│
 ├── client/                     # React + Vite frontend
 │   ├── public/
 │   └── src/
-│       ├── components/
-│       │   ├── Flashcard.jsx   # Flip card UI
-│       │   ├── Quiz.jsx        # MCQ quiz component
-│       │   ├── Summary.jsx     # Topic summary display
-│       │   └── UploadTabs.jsx  # PDF / URL / Paste tab switcher
-│       ├── pages/
-│       │   ├── Login.jsx
-│       │   ├── Register.jsx
-│       │   ├── Upload.jsx
-│       │   └── Dashboard.jsx
-│       ├── api/                # Axios API calls to backend
+│       ├── components/         # UI Elements (Flashcards, Quizzes, etc.)
+│       ├── pages/              # App Views (Login, Dashboard, etc.)
+│       ├── api/                # Axios API calls
 │       └── App.jsx
 │
 ├── server/                     # Node.js + Express backend
-│   ├── routes/
-│   │   ├── auth.js             # /api/auth (register, login)
-│   │   ├── upload.js           # /api/upload (PDF)
-│   │   ├── scrape.js           # /api/scrape (URL)
-│   │   ├── paste.js            # /api/paste (raw text)
-│   │   └── generate.js         # /api/generate (Gemini call)
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Document.js
-│   │   └── Flashcard.js
-│   ├── middleware/
-│   │   └── auth.js             # JWT verification middleware
-│   ├── utils/
-│   │   ├── gemini.js           # Gemini API wrapper
-│   │   ├── pdfParser.js        # pdf-parse wrapper
-│   │   └── scraper.js          # axios + cheerio scraper
-│   └── index.js                # Entry point
+│   ├── routes/                 # API endpoints
+│   ├── models/                 # Mongoose schemas
+│   ├── middleware/             # Express middlewares (Auth, etc.)
+│   ├── utils/                  # Helpers (Gemini, PDF Parsing, Scraper)
+│   └── index.js                # Server entry point
 │
 ├── .env.example
 ├── .gitignore
@@ -112,128 +150,54 @@ quickrev-ai/
 
 ---
 
-## Getting Started
-
-### Prerequisites
-- Node.js v18+
-- MongoDB Atlas account (free) — cloud.mongodb.com
-- Google Gemini API key (free) — aistudio.google.com
-- Cloudinary account (free) — cloudinary.com
-
-### 1. Clone the repo
-git clone https://github.com/your-username/quickrev-ai.git
-cd quickrev-ai
-
-### 2. Install all dependencies
-bash setup.sh
-
-### 3. Set up environment variables
-cp server/.env.example server/.env
-# Open server/.env and fill in your credentials
-
-### 4. Run the app
-# Terminal 1 — backend
-cd server && node index.js
-
-# Terminal 2 — frontend
-cd client && npm run dev
-
-Open http://localhost:5173
-
-### Environment Variables
-| Variable | Where to get it |
-|---|---|
-| MONGODB_URI | cloud.mongodb.com → Connect → Drivers |
-| JWT_SECRET | Any long random string |
-| GEMINI_API_KEY | aistudio.google.com → Get API key |
-| CLOUDINARY_CLOUD_NAME | cloudinary.com → Dashboard |
-| CLOUDINARY_API_KEY | cloudinary.com → Dashboard |
-| CLOUDINARY_API_SECRET | cloudinary.com → Dashboard |
-
----
-
-## API Reference
+## 🔌 API Reference
 
 ### Auth
-
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/auth/register` | Register with email + password |
-| POST | `/api/auth/login` | Login, returns JWT |
+| `POST` | `/api/auth/register` | Register using email and password |
+| `POST` | `/api/auth/login` | Login, returns JWT |
 
-### Input
-
+### Input Sources
 | Method | Endpoint | Body | Description |
 |---|---|---|---|
-| POST | `/api/upload` | `multipart/form-data` (PDF file) | Upload and parse a PDF |
-| POST | `/api/scrape` | `{ url: "https://..." }` | Scrape text from a URL |
-| POST | `/api/paste` | `{ text: "..." }` | Submit raw pasted text |
+| `POST` | `/api/upload` | `multipart/form-data` (PDF) | Upload and parse a PDF |
+| `POST` | `/api/scrape` | `{ "url": "https://..." }` | Scrape text from a URL |
+| `POST` | `/api/paste` | `{ "text": "..." }` | Submit raw pasted text |
 
-### Generate
-
+### Content Generation
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/generate` | Sends extracted text to Gemini, returns summary + flashcards + quiz |
-| GET | `/api/documents/:id` | Fetch saved flashcards and quiz for a document |
+| `POST` | `/api/generate` | Sends text to Gemini, returns summary, flashcards, & quiz |
+| `GET`  | `/api/documents/:id` | Fetch saved flashcards and quiz for a given document |
 
-> All routes except `/api/auth/*` require an `Authorization: Bearer <token>` header.
+> **Note:** All routes except `/api/auth/*` require an `Authorization: Bearer <token>` header.
 
 ---
 
-## How It Works
+## ⚙️ How It Works
 
-```
-User input (PDF / URL / text)
-        ↓
-Backend extracts raw text
-  - PDF   → pdf-parse
-  - URL   → axios + cheerio (strips nav, footer, scripts)
-  - Text  → used directly
-        ↓
-Text sent to Google Gemini API with structured prompt
-  → returns: { summary, flashcards[15], quiz[5] }
-        ↓
-Results saved to MongoDB (linked to user account)
-        ↓
-React frontend fetches and renders:
-  - Summary card
-  - Flashcard flip UI
-  - MCQ quiz with instant feedback
-```
+1. **User Input:** User provides content via PDF, URL, or plain text.
+2. **Text Extraction:** Backend extracts raw text using:
+   - `pdf-parse` for PDFs
+   - `axios` + `cheerio` for URLs (strips navigation, footers, scripts)
+   - Direct parsing for plain text
+3. **AI Processing:** Raw text is sent to the Google Gemini API with a structured prompt to return a predefined JSON format containing a summary, 15 flashcards, and a 5-question quiz.
+4. **Data Storage:** The generated content is linked to the user's account and saved in MongoDB.
+5. **UI Rendering:** The React frontend fetches the data to render the Summary card, Flashcard UI, and interactive MCQ Quizzes.
 
-### Gemini Prompt Template
+### 🌐 URL Scraping Compatibility
 
-```
-You are a study assistant. Given the text below, return ONLY a valid JSON
-object with no markdown formatting, no explanation — just the JSON.
-
-Schema:
-{
-  "summary": "3-5 sentence overview",
-  "flashcards": [{ "question": "...", "answer": "..." }],  // 15 items
-  "quiz": [{
-    "question": "...",
-    "options": ["A", "B", "C", "D"],
-    "correct": 0   // index of correct option
-  }]  // 5 items
-}
-
-TEXT:
-{extracted_text}
-```
-
-### URL Scraping — Supported vs Not Supported
-
-| Works | Does Not Work |
+| ✅ Supported | ❌ Not Supported |
 |---|---|
-| Wikipedia | Twitter / X |
-| GeeksforGeeks | LinkedIn |
-| MDN Docs | Notion (public pages) |
-| Medium articles | React/Angular SPAs |
-| Towards Data Science | Pages behind login |
+| Wikipedia, GeeksforGeeks, MDN Docs | Twitter / X, LinkedIn |
+| Medium articles, Towards Data Science | Notion (public pages), Pages behind login |
+| Static HTML blogs and articles | React/Angular SPAs |
 
-For unsupported pages, users can copy-paste the text manually using the **Paste text** tab.
+> For unsupported pages, please use the **Paste text** feature.
 
 ---
 
-> QuickRev AI — built to make revision smarter, not harder.
+<p align="center">
+  <b>QuickRev AI — built to make revision smarter, not harder.</b>
+</p>
