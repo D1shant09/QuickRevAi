@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Sparkles, UserPlus } from 'lucide-react';
 
 const Register = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -15,7 +16,7 @@ const Register = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            await register(email, password);
+            await register(name, email, password);
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.error || 'Failed to register');
@@ -41,6 +42,17 @@ const Register = () => {
                 {error && <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg mb-6 text-sm flex items-center">{error}</div>}
 
                 <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
+                        <label className="block text-sm font-medium text-neutral-300 mb-1.5">Full Name</label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            className="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 placeholder:text-neutral-600"
+                            placeholder="John Doe"
+                            required
+                        />
+                    </div>
                     <div>
                         <label className="block text-sm font-medium text-neutral-300 mb-1.5">Email Address</label>
                         <input

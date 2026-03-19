@@ -115,75 +115,40 @@ quickrev-ai/
 ## Getting Started
 
 ### Prerequisites
-
 - Node.js v18+
-- MongoDB Atlas account (free tier)
-- Google Gemini API key — get it free at [aistudio.google.com](https://aistudio.google.com)
-- Cloudinary account (free tier)
+- MongoDB Atlas account (free) — cloud.mongodb.com
+- Google Gemini API key (free) — aistudio.google.com
+- Cloudinary account (free) — cloudinary.com
 
 ### 1. Clone the repo
-
-```bash
 git clone https://github.com/your-username/quickrev-ai.git
 cd quickrev-ai
-```
 
-### 2. Install dependencies
-
-```bash
-# Backend
-cd server
-npm install
-
-# Frontend
-cd ../client
-npm install
-```
+### 2. Install all dependencies
+bash setup.sh
 
 ### 3. Set up environment variables
+cp server/.env.example server/.env
+# Open server/.env and fill in your credentials
 
-```bash
-cp .env.example .env
-# Fill in your values (see Environment Variables section below)
-```
-
-### 4. Run the app locally
-
-```bash
+### 4. Run the app
 # Terminal 1 — backend
-cd server
-npm run dev        # runs on http://localhost:5000
+cd server && node index.js
 
 # Terminal 2 — frontend
-cd client
-npm run dev        # runs on http://localhost:5173
-```
+cd client && npm run dev
 
----
+Open http://localhost:5173
 
-## Environment Variables
-
-Create a `.env` file in the `server/` directory:
-
-```env
-# MongoDB
-MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/quickrevai
-
-# JWT
-JWT_SECRET=your_super_secret_key_here
-
-# Google Gemini
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-
-# Server
-PORT=5000
-CLIENT_URL=http://localhost:5173
-```
+### Environment Variables
+| Variable | Where to get it |
+|---|---|
+| MONGODB_URI | cloud.mongodb.com → Connect → Drivers |
+| JWT_SECRET | Any long random string |
+| GEMINI_API_KEY | aistudio.google.com → Get API key |
+| CLOUDINARY_CLOUD_NAME | cloudinary.com → Dashboard |
+| CLOUDINARY_API_KEY | cloudinary.com → Dashboard |
+| CLOUDINARY_API_SECRET | cloudinary.com → Dashboard |
 
 ---
 
