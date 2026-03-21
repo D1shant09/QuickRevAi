@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Plus, LogOut, ArrowRight, Clock, Link as LinkIcon, Type } from 'lucide-react';
+import { FileText, Plus, LogOut, ArrowRight, Clock, Link as LinkIcon, Type, Trash2 } from 'lucide-react';
+import ShinyText from "../components/ShinyText";
 
 const Dashboard = () => {
     const [docs, setDocs] = useState([]);
@@ -22,6 +23,16 @@ const Dashboard = () => {
             console.error(err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const deleteDocument = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this study material?')) return;
+        try {
+            await api.delete(`/generate/${id}`);
+            setDocs((prev) => prev.filter((doc) => doc._id !== id));
+        } catch (error) {
+            console.error('Failed to delete document:', error);
         }
     };
 
@@ -47,7 +58,8 @@ const Dashboard = () => {
             {/* Header */}
             <header className="w-full bg-black/40 border-b border-white/10 backdrop-blur-xl sticky top-0 z-50">
                 <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">QuickRev AI</h1>
+                    <ShinyText text="QuickRev AI" speed={4} className="text-2xl font-bold" />
+                    {/* <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">QuickRev AI</h1> */}
                     <div className="flex items-center gap-6">
                         <span className="text-neutral-400 text-sm hidden sm:inline-block">Welcome, <span className="text-white font-medium">{user?.name || user?.email}</span></span>
                         <button onClick={handleLogout} className="text-neutral-400 hover:text-red-400 transition-colors bg-white/5 hover:bg-red-500/10 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
@@ -92,6 +104,15 @@ const Dashboard = () => {
                                 className="group bg-white/5 border border-white/10 hover:border-purple-500/50 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] hover:-translate-y-1 relative overflow-hidden backdrop-blur-sm"
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); deleteDocument(doc._id); }}
+                                    className="absolute top-4 right-4 z-20 w-8 h-8 rounded-lg flex items-center justify-center text-red-400 bg-transparent hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                                    title="Delete document"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+
                                 <div className="flex items-center gap-3 mb-4 relative z-10">
                                     <div className="p-3 bg-black/40 rounded-xl border border-white/5 group-hover:bg-black/60 transition-colors">
                                         {getIconForType(doc.sourceType)}
