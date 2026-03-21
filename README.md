@@ -43,7 +43,7 @@ Powered by **Google Gemini** and backed by a spaced repetition engine (SM-2 algo
 - **User Authentication** — Secure registration & login with email/password (JWT).
 
 ### 🔮 Phase 2 (Planned)
-- [ ] SM-2 spaced repetition scheduler
+- [x] SM-2 spaced repetition scheduler
 - [ ] Easy / Good / Hard / Again card rating
 - [ ] Analytics dashboard with mastery charts
 - [ ] Revision calendar heatmap

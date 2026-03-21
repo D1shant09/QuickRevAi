@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Upload from './pages/Upload';
 import Dashboard from './pages/Dashboard';
 import Result from './pages/Result';
+import Review from './pages/Review';
 
 const ProtectedRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
@@ -41,6 +42,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Result />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/review"
+                    element={
+                        <ProtectedRoute>
+                            <Review />
                         </ProtectedRoute>
                     }
                 />

@@ -2,18 +2,29 @@ import React, { useState, useEffect, useContext } from 'react';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Plus, LogOut, ArrowRight, Clock, Link as LinkIcon, Type, Trash2 } from 'lucide-react';
+import { FileText, Plus, LogOut, ArrowRight, Clock, Link as LinkIcon, Type, Trash2, Layers } from 'lucide-react';
 import ShinyText from "../components/ShinyText";
 
 const Dashboard = () => {
     const [docs, setDocs] = useState([]);
+    const [dueCount, setDueCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const { logout, user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchDocs();
+        fetchDue();
     }, []);
+
+    const fetchDue = async () => {
+        try {
+            const res = await api.get('/generate/due');
+            setDueCount(res.data.count);
+        } catch (err) {
+            console.error('Failed to fetch due count:', err);
+        }
+    };
 
     const fetchDocs = async () => {
         try {
@@ -71,6 +82,30 @@ const Dashboard = () => {
 
             {/* Main Content */}
             <main className="w-full max-w-6xl mx-auto px-6 py-12 flex-1">
+                {/* Due Cards Banner */}
+                <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                    <div className="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-purple-500/10 to-transparent pointer-events-none"></div>
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 ${dueCount > 0 ? 'bg-purple-500/20 border-purple-500/50 text-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.3)]' : 'bg-green-500/10 border-green-500/30 text-green-400'}`}>
+                            <Layers className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold text-white mb-1">Daily Review</h3>
+                            <p className={`text-sm font-medium ${dueCount > 0 ? 'text-purple-400' : 'text-green-400'}`}>
+                                {dueCount > 0 ? `${dueCount} cards due today` : 'No cards due today'}
+                            </p>
+                        </div>
+                    </div>
+                    {dueCount > 0 && (
+                        <button
+                            onClick={() => navigate('/review')}
+                            className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95 z-10 relative"
+                        >
+                            Start Review
+                        </button>
+                    )}
+                </div>
+
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
                     <div>
                         <h2 className="text-3xl font-bold text-white mb-2">Your Documents</h2>

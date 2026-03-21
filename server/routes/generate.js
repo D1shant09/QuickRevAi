@@ -5,6 +5,7 @@ const { generateFromText } = require('../utils/gemini');
 const { scrapeUrlText } = require('../utils/scraper');
 const { upload, uploadToCloudinary, extractTextFromPDF } = require('../utils/pdfParser');
 const Document = require('../models/Document');
+const { sm2 } = require('../utils/sm2');
 
 router.use(authMiddleware);
 
@@ -76,6 +77,34 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/due', async (req, res) => {
+    try {
+        const now = new Date();
+        const docs = await Document.find({ user: req.user.id });
+        const dueCards = [];
+        docs.forEach(doc => {
+            doc.flashcards.forEach((card, index) => {
+                if (new Date(card.dueDate) <= now) {
+                    dueCards.push({
+                        docId: doc._id,
+                        docTitle: doc.title,
+                        cardIndex: index,
+                        question: card.question,
+                        answer: card.answer,
+                        interval: card.interval,
+                        easeFactor: card.easeFactor,
+                        repetitions: card.repetitions,
+                        dueDate: card.dueDate,
+                    });
+                }
+            });
+        });
+        res.json({ dueCards, count: dueCards.length });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch due cards.' });
+    }
+});
+
 router.get('/:id', async (req, res) => {
     try {
         const doc = await Document.findOne({ _id: req.params.id, user: req.user.id });
@@ -99,6 +128,35 @@ router.delete('/:id', async (req, res) => {
         res.json({ message: 'Document deleted successfully.' });
     } catch (error) {
         res.status(500).json({ error: 'Failed to delete document.' });
+    }
+});
+
+router.post('/review/:docId/:cardIndex', async (req, res) => {
+    try {
+        const { rating } = req.body;
+        if (!['again', 'hard', 'good', 'easy'].includes(rating)) {
+            return res.status(400).json({ error: 'Invalid rating.' });
+        }
+        const doc = await Document.findOne({
+            _id: req.params.docId,
+            user: req.user.id
+        });
+        if (!doc) return res.status(404).json({ error: 'Document not found.' });
+
+        const card = doc.flashcards[req.params.cardIndex];
+        if (!card) return res.status(404).json({ error: 'Card not found.' });
+
+        const updated = sm2(card, rating);
+        doc.flashcards[req.params.cardIndex].interval = updated.interval;
+        doc.flashcards[req.params.cardIndex].easeFactor = updated.easeFactor;
+        doc.flashcards[req.params.cardIndex].repetitions = updated.repetitions;
+        doc.flashcards[req.params.cardIndex].dueDate = updated.dueDate;
+        doc.markModified('flashcards');
+        await doc.save();
+
+        res.json({ message: 'Card reviewed.', card: doc.flashcards[req.params.cardIndex] });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to save review.' });
     }
 });
 

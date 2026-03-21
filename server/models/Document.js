@@ -19,7 +19,11 @@ const documentSchema = new mongoose.Schema({
     },
     flashcards: [{
         question: String,
-        answer: String
+        answer: String,
+        interval: { type: Number, default: 1 },
+        easeFactor: { type: Number, default: 2.5 },
+        repetitions: { type: Number, default: 0 },
+        dueDate: { type: Date, default: Date.now }
     }],
     quiz: [{
         question: String,
