@@ -56,7 +56,7 @@ Powered by **Google Gemini** and backed by a spaced repetition engine (SM-2 algo
 | Layer | Technology | Purpose |
 |---|---|---|
 | **Frontend** | React + Vite | SPA UI |
-| **Styling** | Tailwind CSS | Responsive utility-first styling |
+| **Styling** | Tailwind CSS | Utility-first styling (Dark Slate & Teal UI) |
 | **Backend** | Node.js + Express | REST API server |
 | **Database** | MongoDB + Mongoose | Users, documents, flashcards |
 | **AI** | Google Gemini API | Summarization + flashcard/quiz generation |

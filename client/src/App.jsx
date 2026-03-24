@@ -10,7 +10,7 @@ import Review from './pages/Review';
 
 const ProtectedRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
-    if (loading) return <div className="min-h-screen bg-neutral-900 text-white flex justify-center items-center">Loading...</div>;
+    if (loading) return <div className="min-h-screen flex justify-center items-center" style={{ background: '#222831', color: '#EEEEEE' }}>Loading...</div>;
     if (!user) return <Navigate to="/login" />;
     return children;
 };

@@ -53,27 +53,28 @@ const Dashboard = () => {
     };
 
     const getIconForType = (type) => {
-        if (type === 'pdf') return <FileText className="w-5 h-5 text-pink-400" />;
-        if (type === 'url') return <LinkIcon className="w-5 h-5 text-purple-400" />;
-        return <Type className="w-5 h-5 text-blue-400" />;
+        if (type === 'pdf') return <FileText className="w-5 h-5" style={{ color: '#00ADB5' }} />;
+        if (type === 'url') return <LinkIcon className="w-5 h-5" style={{ color: '#00ADB5' }} />;
+        return <Type className="w-5 h-5" style={{ color: '#00ADB5' }} />;
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white flex justify-center items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        <div className="min-h-screen flex justify-center items-center" style={{ background: '#222831', color: '#EEEEEE' }}>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: '#00ADB5' }}></div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] to-[#121212] flex flex-col items-center">
+        <div className="min-h-screen flex flex-col items-center" style={{ background: '#222831', color: '#EEEEEE' }}>
             {/* Header */}
-            <header className="w-full bg-black/40 border-b border-white/10 backdrop-blur-xl sticky top-0 z-50">
+            <header className="w-full backdrop-blur-xl sticky top-0 z-50" style={{ background: 'rgba(34,40,49,0.9)', borderBottom: '1px solid rgba(0,173,181,0.15)' }}>
                 <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
                     <ShinyText text="QuickRev AI" speed={4} className="text-2xl font-bold" />
-                    {/* <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">QuickRev AI</h1> */}
                     <div className="flex items-center gap-6">
-                        <span className="text-neutral-400 text-sm hidden sm:inline-block">Welcome, <span className="text-white font-medium">{user?.name || user?.email}</span></span>
-                        <button onClick={handleLogout} className="text-neutral-400 hover:text-red-400 transition-colors bg-white/5 hover:bg-red-500/10 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium">
+                        <span className="text-sm hidden sm:inline-block" style={{ color: 'rgba(238,238,238,0.5)' }}>Welcome, <span className="font-medium" style={{ color: '#EEEEEE' }}>{user?.name || user?.email}</span></span>
+                        <button onClick={handleLogout} className="px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors" style={{ color: 'rgba(238,238,238,0.5)', background: 'rgba(238,238,238,0.05)' }}
+                            onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(238,238,238,0.5)'; e.currentTarget.style.background = 'rgba(238,238,238,0.05)'; }}>
                             <LogOut className="w-4 h-4" /> Logout
                         </button>
                     </div>
@@ -83,15 +84,15 @@ const Dashboard = () => {
             {/* Main Content */}
             <main className="w-full max-w-6xl mx-auto px-6 py-12 flex-1">
                 {/* Due Cards Banner */}
-                <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden">
-                    <div className="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-purple-500/10 to-transparent pointer-events-none"></div>
+                <div className="w-full rounded-2xl p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden" style={{ background: '#393E46', border: '1px solid rgba(0,173,181,0.2)' }}>
+                    <div className="absolute right-0 top-0 w-64 h-full pointer-events-none" style={{ background: 'linear-gradient(to left, rgba(0,173,181,0.1), transparent)' }}></div>
                     <div className="flex items-center gap-4 relative z-10">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2 ${dueCount > 0 ? 'bg-purple-500/20 border-purple-500/50 text-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.3)]' : 'bg-green-500/10 border-green-500/30 text-green-400'}`}>
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center border-2`} style={dueCount > 0 ? { background: 'rgba(0,173,181,0.15)', borderColor: 'rgba(0,173,181,0.5)', color: '#00ADB5', boxShadow: '0 0 20px rgba(0,173,181,0.2)' } : { background: 'rgba(34,197,94,0.1)', borderColor: 'rgba(34,197,94,0.3)', color: '#4ade80' }}>
                             <Layers className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-white mb-1">Daily Review</h3>
-                            <p className={`text-sm font-medium ${dueCount > 0 ? 'text-purple-400' : 'text-green-400'}`}>
+                            <h3 className="text-xl font-bold mb-1" style={{ color: '#EEEEEE' }}>Daily Review</h3>
+                            <p className="text-sm font-medium" style={{ color: dueCount > 0 ? '#00ADB5' : '#4ade80' }}>
                                 {dueCount > 0 ? `${dueCount} cards due today` : 'No cards due today'}
                             </p>
                         </div>
@@ -99,7 +100,8 @@ const Dashboard = () => {
                     {dueCount > 0 && (
                         <button
                             onClick={() => navigate('/review')}
-                            className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg transition-all hover:scale-105 active:scale-95 z-10 relative"
+                            className="w-full sm:w-auto px-8 py-3 font-bold rounded-xl transition-all hover:scale-105 active:scale-95 z-10 relative"
+                            style={{ background: '#00ADB5', color: '#222831', boxShadow: '0 0 20px rgba(0,173,181,0.3)' }}
                         >
                             Start Review
                         </button>
@@ -108,25 +110,26 @@ const Dashboard = () => {
 
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold text-white mb-2">Your Documents</h2>
-                        <p className="text-neutral-400">Manage and review your AI-generated study materials.</p>
+                        <h2 className="text-3xl font-bold mb-2" style={{ color: '#EEEEEE' }}>Your Documents</h2>
+                        <p style={{ color: 'rgba(238,238,238,0.5)' }}>Manage and review your AI-generated study materials.</p>
                     </div>
                     <button
                         onClick={() => navigate('/upload')}
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-6 py-3 rounded-xl flex items-center gap-2 font-semibold shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all hover:scale-105 active:scale-95"
+                        className="px-6 py-3 rounded-xl flex items-center gap-2 font-semibold transition-all hover:scale-105 active:scale-95"
+                        style={{ background: '#00ADB5', color: '#222831', boxShadow: '0 0 20px rgba(0,173,181,0.25)' }}
                     >
                         <Plus className="w-5 h-5" /> New Material
                     </button>
                 </div>
 
                 {docs.length === 0 ? (
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-16 flex flex-col items-center text-center backdrop-blur-sm">
-                        <div className="w-20 h-20 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mb-6 border border-white/5 shadow-[inset_0_0_20px_rgba(59,130,246,0.3)]">
-                            <FileText className="w-10 h-10 text-neutral-400" />
+                    <div className="rounded-2xl p-16 flex flex-col items-center text-center" style={{ background: '#393E46', border: '1px solid rgba(0,173,181,0.15)' }}>
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-6" style={{ background: 'rgba(0,173,181,0.1)', border: '1px solid rgba(0,173,181,0.2)', boxShadow: 'inset 0 0 20px rgba(0,173,181,0.15)' }}>
+                            <FileText className="w-10 h-10" style={{ color: 'rgba(238,238,238,0.4)' }} />
                         </div>
-                        <h3 className="text-xl font-bold text-white mb-2">No documents yet</h3>
-                        <p className="text-neutral-400 mb-8 max-w-sm">You haven't generated any study materials yet. Upload a PDF, link, or text to get started.</p>
-                        <button onClick={() => navigate('/upload')} className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 border border-white/10 rounded-xl font-medium transition flex items-center gap-2">
+                        <h3 className="text-xl font-bold mb-2" style={{ color: '#EEEEEE' }}>No documents yet</h3>
+                        <p className="mb-8 max-w-sm" style={{ color: 'rgba(238,238,238,0.5)' }}>You haven't generated any study materials yet. Upload a PDF, link, or text to get started.</p>
+                        <button onClick={() => navigate('/upload')} className="px-6 py-3 rounded-xl font-medium transition flex items-center gap-2" style={{ background: 'rgba(0,173,181,0.1)', border: '1px solid rgba(0,173,181,0.25)', color: '#00ADB5' }}>
                             Create your first document <ArrowRight className="w-4 h-4" />
                         </button>
                     </div>
@@ -136,30 +139,36 @@ const Dashboard = () => {
                             <div
                                 key={doc._id}
                                 onClick={() => navigate(`/result`, { state: { document: doc } })}
-                                className="group bg-white/5 border border-white/10 hover:border-purple-500/50 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] hover:-translate-y-1 relative overflow-hidden backdrop-blur-sm"
+                                className="group rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
+                                style={{ background: '#393E46', border: '1px solid rgba(0,173,181,0.15)' }}
+                                onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(0,173,181,0.5)'}
+                                onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(0,173,181,0.15)'}
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <div className="absolute top-0 right-0 w-32 h-32 rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'linear-gradient(to bottom-left, rgba(0,173,181,0.1), transparent)' }}></div>
 
                                 <button
                                     onClick={(e) => { e.stopPropagation(); deleteDocument(doc._id); }}
-                                    className="absolute top-4 right-4 z-20 w-8 h-8 rounded-lg flex items-center justify-center text-red-400 bg-transparent hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                                    className="absolute top-4 right-4 z-20 w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                                    style={{ color: '#f87171' }}
+                                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.1)'}
+                                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                                     title="Delete document"
                                 >
                                     <Trash2 className="w-5 h-5" />
                                 </button>
 
                                 <div className="flex items-center gap-3 mb-4 relative z-10">
-                                    <div className="p-3 bg-black/40 rounded-xl border border-white/5 group-hover:bg-black/60 transition-colors">
+                                    <div className="p-3 rounded-xl border transition-colors" style={{ background: '#222831', borderColor: 'rgba(0,173,181,0.15)' }}>
                                         {getIconForType(doc.sourceType)}
                                     </div>
-                                    <h3 className="text-lg font-bold text-white truncate max-w-[200px]" title={doc.title}>{doc.title}</h3>
+                                    <h3 className="text-lg font-bold truncate max-w-[200px]" style={{ color: '#EEEEEE' }} title={doc.title}>{doc.title}</h3>
                                 </div>
-                                <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5 relative z-10">
-                                    <div className="flex items-center gap-2 text-xs font-medium text-neutral-500">
+                                <div className="flex items-center justify-between mt-6 pt-4 relative z-10" style={{ borderTop: '1px solid rgba(0,173,181,0.1)' }}>
+                                    <div className="flex items-center gap-2 text-xs font-medium" style={{ color: 'rgba(238,238,238,0.4)' }}>
                                         <Clock className="w-3.5 h-3.5" />
                                         {new Date(doc.createdAt).toLocaleDateString()}
                                     </div>
-                                    <div className="flex items-center gap-1 text-sm font-semibold text-purple-400 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                                    <div className="flex items-center gap-1 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0" style={{ color: '#00ADB5' }}>
                                         View Result <ArrowRight className="w-4 h-4" />
                                     </div>
                                 </div>

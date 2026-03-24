@@ -41,79 +41,97 @@ const Upload = () => {
         }
     };
 
+    const tabActive = { color: '#00ADB5', borderBottom: '3px solid #00ADB5', background: 'rgba(0,173,181,0.06)' };
+    const tabInactive = { color: 'rgba(238,238,238,0.4)', borderBottom: '3px solid transparent' };
+
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
+        <div className="min-h-screen p-8" style={{ background: '#222831', color: '#EEEEEE' }}>
             <div className="max-w-4xl mx-auto space-y-8 mt-12">
                 <div className="text-center space-y-2">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent transform transition-all hover:scale-105 duration-300">Create Study Material</h1>
-                    <p className="text-neutral-400 text-lg">Transform your notes, articles, and PDFs into interactive resources effortlessly.</p>
+                    <h1 className="text-4xl font-bold transform transition-all hover:scale-105 duration-300" style={{ color: '#00ADB5' }}>Create Study Material</h1>
+                    <p className="text-lg" style={{ color: 'rgba(238,238,238,0.5)' }}>Transform your notes, articles, and PDFs into interactive resources effortlessly.</p>
                 </div>
 
-                {error && <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded-xl text-center max-w-2xl mx-auto shadow-lg shadow-red-500/5">{error}</div>}
+                {error && <div className="p-4 rounded-xl text-center max-w-2xl mx-auto" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.4)', color: '#f87171' }}>{error}</div>}
 
-                <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-                    <div className="flex border-b border-white/10 bg-black/40">
+                <div className="rounded-2xl overflow-hidden" style={{ background: '#393E46', border: '1px solid rgba(0,173,181,0.15)', boxShadow: '0 0 40px rgba(0,0,0,0.4)' }}>
+                    <div className="flex" style={{ borderBottom: '1px solid rgba(0,173,181,0.15)', background: 'rgba(34,40,49,0.6)' }}>
                         <button
-                            className={`flex-1 py-5 flex items-center justify-center gap-3 font-semibold text-lg transition-all duration-300 ${activeTab === 'text' ? 'text-blue-400 border-b-[3px] border-blue-400 bg-blue-500/5' : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/5 border-b-[3px] border-transparent'}`}
+                            className="flex-1 py-5 flex items-center justify-center gap-3 font-semibold text-lg transition-all duration-300"
+                            style={activeTab === 'text' ? tabActive : tabInactive}
                             onClick={() => setActiveTab('text')}
                         >
                             <Type className="h-6 w-6" /> Paste Text
                         </button>
                         <button
-                            className={`flex-1 py-5 flex items-center justify-center gap-3 font-semibold text-lg transition-all duration-300 ${activeTab === 'url' ? 'text-purple-400 border-b-[3px] border-purple-400 bg-purple-500/5' : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/5 border-b-[3px] border-transparent'}`}
+                            className="flex-1 py-5 flex items-center justify-center gap-3 font-semibold text-lg transition-all duration-300"
+                            style={activeTab === 'url' ? tabActive : tabInactive}
                             onClick={() => setActiveTab('url')}
                         >
                             <LinkIcon className="h-6 w-6" /> Web Link
                         </button>
                         <button
-                            className={`flex-1 py-5 flex items-center justify-center gap-3 font-semibold text-lg transition-all duration-300 ${activeTab === 'pdf' ? 'text-pink-400 border-b-[3px] border-pink-400 bg-pink-500/5' : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/5 border-b-[3px] border-transparent'}`}
+                            className="flex-1 py-5 flex items-center justify-center gap-3 font-semibold text-lg transition-all duration-300"
+                            style={activeTab === 'pdf' ? tabActive : tabInactive}
                             onClick={() => setActiveTab('pdf')}
                         >
                             <FileText className="h-6 w-6" /> PDF Upload
                         </button>
                     </div>
 
-                    <div className="p-10 space-y-8 bg-gradient-to-b from-transparent to-black/20">
+                    <div className="p-10 space-y-8">
                         <div className="group">
-                            <label className="block text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wider group-focus-within:text-blue-400 transition-colors">Title (Optional)</label>
+                            <label className="block text-sm font-semibold mb-2 uppercase tracking-wider" style={{ color: 'rgba(238,238,238,0.5)' }}>Title (Optional)</label>
                             <input
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder="e.g. Intro to Machine Learning..."
-                                className="w-full bg-black/60 border border-white/10 rounded-xl p-4 text-white hover:border-white/20 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 placeholder:text-neutral-700 font-medium"
+                                className="w-full rounded-xl p-4 outline-none transition-all duration-300"
+                                style={{ background: '#222831', border: '1px solid rgba(0,173,181,0.2)', color: '#EEEEEE' }}
+                                onFocus={e => e.target.style.borderColor = '#00ADB5'}
+                                onBlur={e => e.target.style.borderColor = 'rgba(0,173,181,0.2)'}
                             />
                         </div>
 
                         {activeTab === 'text' && (
-                            <div className="group animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <label className="block text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wider group-focus-within:text-blue-400 transition-colors">Source Text</label>
+                            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <label className="block text-sm font-semibold mb-2 uppercase tracking-wider" style={{ color: 'rgba(238,238,238,0.5)' }}>Source Text</label>
                                 <textarea
                                     value={text}
                                     onChange={(e) => setText(e.target.value)}
                                     placeholder="Paste your extensive study notes, transcription, or raw content here block by block..."
-                                    className="w-full h-72 bg-black/60 border border-white/10 rounded-xl p-5 text-white hover:border-white/20 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 resize-none font-mono text-sm leading-relaxed placeholder:text-neutral-700"
+                                    className="w-full h-72 rounded-xl p-5 outline-none transition-all duration-300 resize-none font-mono text-sm leading-relaxed"
+                                    style={{ background: '#222831', border: '1px solid rgba(0,173,181,0.2)', color: '#EEEEEE' }}
+                                    onFocus={e => e.target.style.borderColor = '#00ADB5'}
+                                    onBlur={e => e.target.style.borderColor = 'rgba(0,173,181,0.2)'}
                                 />
                             </div>
                         )}
 
                         {activeTab === 'url' && (
-                            <div className="group animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <label className="block text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wider group-focus-within:text-purple-400 transition-colors">Article URL</label>
+                            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <label className="block text-sm font-semibold mb-2 uppercase tracking-wider" style={{ color: 'rgba(238,238,238,0.5)' }}>Article URL</label>
                                 <input
                                     type="url"
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
                                     placeholder="https://en.wikipedia.org/wiki/..."
-                                    className="w-full bg-black/60 border border-white/10 rounded-xl p-4 text-white hover:border-white/20 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all duration-300 placeholder:text-neutral-700 font-medium"
+                                    className="w-full rounded-xl p-4 outline-none transition-all duration-300"
+                                    style={{ background: '#222831', border: '1px solid rgba(0,173,181,0.2)', color: '#EEEEEE' }}
+                                    onFocus={e => e.target.style.borderColor = '#00ADB5'}
+                                    onBlur={e => e.target.style.borderColor = 'rgba(0,173,181,0.2)'}
                                 />
                             </div>
                         )}
 
                         {activeTab === 'pdf' && (
-                            <div className="group animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <label className="block text-sm font-semibold text-neutral-400 mb-2 uppercase tracking-wider group-focus-within:text-pink-400 transition-colors">PDF Document</label>
-                                <div className="border-2 border-dashed border-white/20 rounded-2xl p-16 text-center hover:bg-pink-500/5 hover:border-pink-500/50 transition-all duration-300 group-hover:shadow-[inset_0_0_20px_rgba(236,72,153,0.1)] cursor-pointer relative overflow-hidden">
+                            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <label className="block text-sm font-semibold mb-2 uppercase tracking-wider" style={{ color: 'rgba(238,238,238,0.5)' }}>PDF Document</label>
+                                <div className="border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer relative overflow-hidden group" style={{ borderColor: 'rgba(0,173,181,0.3)' }}
+                                    onMouseEnter={e => e.currentTarget.style.borderColor = '#00ADB5'}
+                                    onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(0,173,181,0.3)'}
+                                >
                                     <input
                                         type="file"
                                         accept="application/pdf"
@@ -121,11 +139,11 @@ const Upload = () => {
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     />
                                     <div className="pointer-events-none relative z-0 flex flex-col items-center">
-                                        <div className="p-4 bg-white/5 rounded-full mb-4 group-hover:scale-110 transition-transform duration-500 group-hover:bg-pink-500/10">
-                                            <FileText className="h-10 w-10 text-neutral-500 group-hover:text-pink-400 transition-colors" />
+                                        <div className="p-4 rounded-full mb-4 transition-transform duration-500" style={{ background: 'rgba(0,173,181,0.1)' }}>
+                                            <FileText className="h-10 w-10" style={{ color: '#00ADB5' }} />
                                         </div>
-                                        <p className="text-xl font-medium text-neutral-300 mb-1">{file ? file.name : 'Click or drop your PDF here'}</p>
-                                        {!file && <p className="text-neutral-500 mt-2">Maximum file size: 10MB</p>}
+                                        <p className="text-xl font-medium mb-1" style={{ color: '#EEEEEE' }}>{file ? file.name : 'Click or drop your PDF here'}</p>
+                                        {!file && <p style={{ color: 'rgba(238,238,238,0.4)' }} className="mt-2">Maximum file size: 10MB</p>}
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +152,8 @@ const Upload = () => {
                         <button
                             onClick={handleGenerate}
                             disabled={loading}
-                            className="w-full py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold rounded-xl shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-75 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg mt-8"
+                            className="w-full py-5 font-bold rounded-xl transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-75 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg mt-8"
+                            style={{ background: '#00ADB5', color: '#222831', boxShadow: '0 0 30px rgba(0,173,181,0.35)' }}
                         >
                             {loading ? (
                                 <>
