@@ -1,5 +1,32 @@
 {
+  "name": "quickrev-ai",
+  "version": "1.0.0",
+  "description": "An AI-powered revision platform using spaced repetition (SM-2) to generate summaries, flashcards, and quizzes from PDFs, URLs, and text notes.",
+  "main": "server/index.js",
+  "scripts": {
+    "postinstall": "npm install --prefix server && npm install --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev": "concurrently -n \"server,client\" -c \"blue,green\" \"npm run dev:server\" \"npm run dev:client\"",
+    "start": "npm run start --prefix server",
+    "build": "npm run build --prefix client"
+  },
+  "keywords": [
+    "ai",
+    "gemini",
+    "spaced-repetition",
+    "sm2",
+    "flashcards",
+    "quiz",
+    "revision",
+    "study-tool"
+  ],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "motion": "^12.38.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
